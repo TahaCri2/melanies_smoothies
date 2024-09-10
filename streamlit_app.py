@@ -45,6 +45,7 @@ if ingredients_LIST:
 
         st.subheader(fruit_chosen + 'Nutrition Information')
         fruityvice_response = requests.get("https://fruityvice.com/api/fruit/", + fruit_chosen)
+        st.json(fruityvice_response.json())
         
     #st.write(ingredients_string)
 
