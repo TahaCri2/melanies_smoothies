@@ -19,7 +19,7 @@ st.write("The name on your smoothie will be:", name_on_order)
 cnx=st.connection("snowflake")
 session=cnx.session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
-#st.dataframe(data=my_dataframe, use_container_width=True)
+
 #st.stop()
 
 #convert snowflake database to pandas using loc function
@@ -48,17 +48,11 @@ if ingredients_LIST:
 
         # Make the API request using the 'search_on' value
         fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/" + fruit_chosen)
-
-        # Display the JSON response from the API
-        st.json(fruityvice_response.json())
-
+        fv_df=st.dataframe(data=fruityvice_response.json(), use_container_width=True)
         
-    #st.write(ingredients_string)
-
-   
-    my_insert_stmt = """ insert into smoothies.public.orders(ingredients)
-            values ('""" + ingredients_string + """')"""
-
+        #st.write(ingredients_string)
+        my_insert_stmt = """ insert into smoothies.public.orders(name, ingredients) 
+                values ('""" + ingredients_string + """', '""" + name_on_order + """')"""
     #st.write(my_insert_stmt)
     #st.stop()
     
