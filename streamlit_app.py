@@ -47,7 +47,7 @@ if ingredients_LIST:
         st.subheader(fruit_chosen + ' Nutrition Information')
 
         # Make the API request using the 'search_on' value
-        fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{search_on}")
+        fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_chosen}")
         
         # Display the JSON response from the API
         if fruityvice_response.status_code == 200:
