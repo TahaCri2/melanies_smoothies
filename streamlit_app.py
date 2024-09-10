@@ -23,8 +23,6 @@ my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT
 # Convert Snowflake dataframe to Pandas dataframe
 pd_df = my_dataframe.to_pandas()
 
-# Extract the fruit names for the multiselect options
-fruit_options = pd_df['FRUIT_NAME'].tolist()
 
 # Multiselect for choosing ingredients
 ingredients_LIST = st.multiselect(
@@ -40,20 +38,17 @@ if ingredients_LIST:
         ingredients_string += fruit_chosen + ' '
         
         # Get the 'SEARCH_ON' value for the chosen fruit
-        search_on = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
-        st.write(f'The search value for {fruit_chosen} is {search_on}.')
+        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+        st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
 
         # Display the nutrition information subheader
         st.subheader(fruit_chosen + ' Nutrition Information')
 
         # Make the API request using the 'search_on' value
-        fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_chosen}")
+        fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/" + fruit_chosen)
         
-        # Display the JSON response from the API
         if fruityvice_response.status_code == 200:
             st.json(fruityvice_response.json())
-        else:
-            st.error('Could not retrieve nutrition information.')
 
     # SQL insert statement for the chosen ingredients
     my_insert_stmt = f"""INSERT INTO smoothies.public.orders (ingredients)
